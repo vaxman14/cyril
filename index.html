@@ -248,37 +248,33 @@
     }
     .about-bio p:last-child { margin-bottom: 0; }
 
-    .about-monogram {
-      width: 240px;
-      height: 240px;
-      border: 1px solid rgba(201, 162, 39, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .about-photo {
       position: relative;
       margin: 0 auto;
     }
 
-    .monogram-letters {
-      font-family: 'Playfair Display', serif;
-      font-size: 6rem;
-      color: rgba(201, 162, 39, 0.2);
-      font-weight: 900;
-      line-height: 1;
-      user-select: none;
+    .about-photo img {
+      width: 100%;
+      max-width: 420px;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      border: 1px solid rgba(201, 162, 39, 0.25);
+      filter: grayscale(20%);
+      transition: filter 0.4s ease;
     }
 
-    .monogram-est {
+    .about-photo img:hover {
+      filter: grayscale(0%);
+    }
+
+    .about-photo::after {
+      content: '';
       position: absolute;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Inter', sans-serif;
-      font-weight: 400;
-      letter-spacing: 0.3em;
-      font-size: 0.6rem;
-      color: var(--gold);
-      white-space: nowrap;
+      inset: 12px -12px -12px 12px;
+      border: 1px solid rgba(201, 162, 39, 0.2);
+      pointer-events: none;
+      z-index: -1;
     }
 
     /* ─── BOOKS ──────────────────────────────────────────────────────── */
@@ -634,7 +630,7 @@
         gap: 3rem;
       }
 
-      .about-monogram { display: none; }
+      .about-photo { display: none; }
 
       .books-grid {
         grid-template-columns: 1fr;
@@ -726,9 +722,8 @@
         </div>
 
         <div class="reveal">
-          <div class="about-monogram">
-            <span class="monogram-letters">CK</span>
-            <span class="monogram-est">EST. 1994</span>
+          <div class="about-photo">
+            <img src="cyril-chef.jpg" alt="Chef Cyril Kabaoglu plating in the kitchen" />
           </div>
         </div>
       </div>
