@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chef Cyril Kabaoglu — 30 Years of Michelin Excellence</title>
+  <meta name="description" content="Chef Cyril Kabaoglu — 30+ years in Michelin-starred kitchens across France and America. Author, culinary trainer for The Bear (FX), private event chef." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────────────── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: #0d0d0d;
+      color: #f0ede8;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── DESIGN TOKENS ──────────────────────────────────────────────── */
+    :root {
+      --bg:       #0d0d0d;
+      --bg-alt:   #0a0a0a;
+      --gold:     #c9a227;
+      --cream:    #f0ede8;
+      --muted:    #9b8a6e;
+      --card-bg:  #161616;
+      --border:   #2a2a2a;
+    }
+
+    /* ─── REVEAL ANIMATIONS ──────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 5%;
+      transition: background 0.4s ease, border-color 0.4s ease, backdrop-filter 0.4s ease;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(13, 13, 13, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom-color: var(--border);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.4em;
+      color: var(--cream);
+      text-decoration: none;
+      font-weight: 400;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ─── HERO ───────────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    /* Grain texture overlay */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Radial vignette */
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      padding: 0 2rem;
+    }
+
+    .hero-rule {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.3s forwards;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(2.5rem, 7vw, 7rem);
+      color: var(--cream);
+      line-height: 1.05;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.5s forwards;
+    }
+
+    .hero-tagline {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      margin-top: 1.5rem;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.7s forwards;
+    }
+
+    .hero-credentials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeInUp 1s ease 0.9s forwards;
+    }
+
+    .credential-pill {
+      border: 1px solid rgba(201, 162, 39, 0.4);
+      color: var(--gold);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      color: var(--gold);
+      font-size: 1.2rem;
+      animation: scrollBounce 2s ease-in-out infinite;
+      cursor: pointer;
+      opacity: 0.8;
+    }
+
+    /* ─── SECTION SHARED ─────────────────────────────────────────────── */
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+    }
+
+    /* ─── ABOUT ──────────────────────────────────────────────────────── */
+    #about {
+      padding: 140px 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .about-wrapper {
+      padding: 0;
+    }
+
+    .about-pull-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      color: var(--cream);
+      border-left: 3px solid var(--gold);
+      padding-left: 2rem;
+      margin-bottom: 4rem;
+      line-height: 1.4;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 60fr 40fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-bio p {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .about-bio p:last-child { margin-bottom: 0; }
+
+    .about-monogram {
+      width: 240px;
+      height: 240px;
+      border: 1px solid rgba(201, 162, 39, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .monogram-letters {
+      font-family: 'Playfair Display', serif;
+      font-size: 6rem;
+      color: rgba(201, 162, 39, 0.2);
+      font-weight: 900;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .monogram-est {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      font-size: 0.6rem;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+
+    /* ─── BOOKS ──────────────────────────────────────────────────────── */
+    #books {
+      padding: 140px 5%;
+      background: var(--bg-alt);
+    }
+
+    .books-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .books-intro {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .book-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      padding: 2.5rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .book-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(201, 162, 39, 0.05);
+    }
+
+    .book-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--cream);
+      line-height: 1.2;
+    }
+
+    .book-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      color: var(--gold);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin: 0.5rem 0 1rem;
+    }
+
+    .book-description {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 0.95rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .book-contents-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .book-chapters {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .book-chapters li {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .book-chapters li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: rgba(201, 162, 39, 0.5);
+    }
+
+    /* ─── PHILOSOPHY / COMMANDMENTS ─────────────────────────────────── */
+    #philosophy {
+      padding: 140px 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .philosophy-intro {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .commandments-list {
+      margin-top: 5rem;
+    }
+
+    .commandment-item {
+      position: relative;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid #1a1a1a;
+      margin-bottom: 3rem;
+      overflow: hidden;
+    }
+    .commandment-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .commandment-bg-numeral {
+      position: absolute;
+      left: 0;
+      top: -20px;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: clamp(5rem, 12vw, 10rem);
+      color: rgba(201, 162, 39, 0.07);
+      line-height: 1;
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+    }
+
+    .commandment-content {
+      position: relative;
+      z-index: 1;
+      padding-left: clamp(4rem, 8vw, 8rem);
+    }
+
+    .commandment-numeral-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .commandment-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: var(--cream);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+    }
+
+    .commandment-text {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 1rem;
+      max-width: 60ch;
+    }
+
+    /* ─── EVENTS ─────────────────────────────────────────────────────── */
+    #events {
+      padding: 140px 5%;
+      background: var(--bg-alt);
+    }
+
+    .events-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .events-list {
+      margin-top: 4rem;
+    }
+
+    .event-row {
+      border-top: 1px solid #1a1a1a;
+      padding: 1.5rem 0;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      cursor: default;
+    }
+    .event-row:hover { color: var(--cream); }
+    .event-row:last-child {
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    /* ─── SIGNATURE DISHES ───────────────────────────────────────────── */
+    #dishes {
+      padding: 140px 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .dishes-intro {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .dishes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .dish-item {
+      border: 1px solid var(--border);
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .dish-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 0;
+      background: var(--gold);
+      transition: height 0.4s ease;
+    }
+    .dish-item:hover { border-color: rgba(201, 162, 39, 0.3); background: rgba(201, 162, 39, 0.02); }
+    .dish-item:hover::before { height: 100%; }
+
+    .dish-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: 1rem;
+      color: var(--cream);
+      line-height: 1.4;
+    }
+
+    /* ─── CONTACT ────────────────────────────────────────────────────── */
+    #contact {
+      padding: 180px 5%;
+      text-align: center;
+    }
+
+    .contact-headline {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 4rem);
+      color: var(--cream);
+      letter-spacing: 0.03em;
+    }
+
+    .contact-rule {
+      width: 80px;
+      height: 1px;
+      background: var(--gold);
+      margin: 2rem auto;
+    }
+
+    .contact-sub {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+
+    .contact-cta {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 14px 40px;
+      letter-spacing: 0.2em;
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      text-decoration: none;
+      text-transform: uppercase;
+      margin-top: 3rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .contact-cta:hover {
+      background: var(--gold);
+      color: var(--bg);
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid #1a1a1a;
+      padding: 2rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy,
+    .footer-motto {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.75rem;
+      color: #4a4a4a;
+    }
+
+    /* ─── KEYFRAMES ──────────────────────────────────────────────────── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ─── MOBILE ─────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+
+      .hero-name {
+        font-size: clamp(2.2rem, 10vw, 3.5rem);
+      }
+
+      .credential-pill {
+        font-size: 0.58rem;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .about-monogram { display: none; }
+
+      .books-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .commandment-bg-numeral {
+        font-size: clamp(3.5rem, 15vw, 6rem);
+      }
+
+      .commandment-content {
+        padding-left: clamp(2.5rem, 6vw, 4rem);
+      }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      #about,
+      #philosophy {
+        padding: 80px 5%;
+      }
+
+      #books,
+      #events {
+        padding: 80px 5%;
+      }
+
+      #dishes {
+        padding: 80px 5%;
+      }
+
+      #contact {
+        padding: 100px 5%;
+      }
+
+      .dishes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ NAV ═══════════════════════════════════════════════════════════ -->
+  <nav id="main-nav">
+    <a href="#hero" class="nav-logo">CYRIL</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#books">Books</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ═══ HERO ═══════════════════════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="hero-rule"></div>
+      <h1 class="hero-name">CHEF CYRIL<br>KABAOGLU</h1>
+      <p class="hero-tagline">30 Years of Michelin Excellence.</p>
+      <div class="hero-credentials">
+        <span class="credential-pill">30+ Years Michelin-Starred Kitchens</span>
+        <span class="credential-pill">Trained the Cast of The Bear (FX)</span>
+        <span class="credential-pill">Author · The Edge 2.0</span>
+        <span class="credential-pill">Author · The Michelin Edge</span>
+        <span class="credential-pill">Culinary Educator &amp; Mentor</span>
+        <span class="credential-pill">Private Event Chef</span>
+      </div>
+    </div>
+    <div class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">↓</div>
+  </section>
+
+  <!-- ═══ ABOUT ═══════════════════════════════════════════════════════════ -->
+  <div id="about">
+    <section class="about-wrapper">
+      <p class="section-label reveal">— ABOUT —</p>
+
+      <blockquote class="about-pull-quote reveal">
+        "Cooking is art, but consistency is systems."
+      </blockquote>
+
+      <div class="about-grid">
+        <div class="about-bio reveal">
+          <p>Chef Cyril Kabaoglu entered his first professional kitchen with a rolled knife bag, a starched jacket, and the certainty that talent alone would carry him. What followed was thirty years of discovery — across Michelin-starred kitchens in France and America — that reshaped that conviction entirely.</p>
+          <p>He learned that professional cooking is not a talent competition; it is a discipline competition. That insight became the foundation of everything he has built since: a culinary philosophy rooted in structure, emotional control, and unbreakable standards.</p>
+          <p>Over three decades, Cyril rose to the highest levels of the culinary world, earning Michelin recognition and developing a reputation not just as an exceptional cook but as a systems thinker who understands how great kitchens actually function. He has trained cooks at every level, most notably serving as culinary trainer for the cast of the critically acclaimed FX series The Bear — bringing the same rigor, pace, and professional authenticity to screen that he demands in real service.</p>
+          <p>Today, Cyril channels that accumulated expertise into mentorship and education. His book <em>The Edge 2.0</em> is a complete manifesto for professional cooks — not a recipe collection, but a system blueprint for how to think, move, organize, and lead inside a professional kitchen. His follow-up guide <em>The Michelin Edge</em> brings those same Michelin-level principles to home cooks, stripping away the gatekeeping and delivering the real edge he wished someone had given him on day one.</p>
+        </div>
+
+        <div class="reveal">
+          <div class="about-monogram">
+            <span class="monogram-letters">CK</span>
+            <span class="monogram-est">EST. 1994</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══ BOOKS ════════════════════════════════════════════════════════════ -->
+  <section id="books">
+    <div class="books-inner">
+      <p class="section-label reveal">— THE WORK —</p>
+      <p class="books-intro reveal">Discipline documented. Systems published.</p>
+
+      <div class="books-grid">
+
+        <!-- Book 1: The Edge 2.0 -->
+        <div class="book-card reveal">
+          <h3 class="book-title">The Edge 2.0</h3>
+          <p class="book-subtitle">Kitchen Fundamentals Every Professional Must Master</p>
+          <p class="book-description">A complete manifesto for professional cooks — not a recipe collection or flavor-pairing guide, but a system blueprint for how to think, move, organize, and lead inside a professional kitchen. Drawing on thirty years in Michelin-starred kitchens, Chef Cyril lays out the ten fundamentals that form the architecture of every great kitchen he has ever worked in, studied, or operated. The book closes with The 10 Commandments of the Professional Kitchen.</p>
+          <p class="book-contents-label">Contents</p>
+          <ul class="book-chapters">
+            <li>Foreword: A Letter to the Cook You Are About to Become</li>
+            <li>Chapter 01: Mise en Place — Your Psychological Weapon Before Service Even Begins</li>
+            <li>Chapter 02: Discipline Creates Freedom — How Structure Unlocks Your Creative Potential</li>
+            <li>Chapter 03: Cleanliness Is Intelligence — A Clean Station Is a Clear Mind</li>
+            <li>Chapter 04: Repetition Builds Mastery — Why Michelin Kitchens Are Built on Boredom</li>
+            <li>Chapter 05: Emotional Control — The Skill That Separates Good Cooks from Great Ones</li>
+            <li>Chapter 06: Systems Reduce Pressure — How Smart Operations Protect People and Standards</li>
+            <li>Chapter 07: Leadership Through Presence — You Lead Through What You Model, Not What You Say</li>
+            <li>Chapter 08: Precision Is Respect — Accuracy in the Kitchen Is a Form of Integrity</li>
+            <li>Chapter 09: Build Your Culinary Identity — Know Not Just How You Cook, But Why</li>
+            <li>Chapter 10: Revolution Through Systems — How the Next Generation Transforms Hospitality</li>
+            <li>The 10 Commandments of the Professional Kitchen</li>
+          </ul>
+        </div>
+
+        <!-- Book 2: The Michelin Edge -->
+        <div class="book-card reveal">
+          <h3 class="book-title">The Michelin Edge</h3>
+          <p class="book-subtitle">30 Years of Michelin-Starred Kitchen Secrets for Home Cooks</p>
+          <p class="book-description">Everything Cyril learned across thirty years in Michelin-starred kitchens — distilled for home cooks with no gatekeeping and no ego. The guide covers mise en place mastery, professional flavor layering, Michelin plating rules, signature recipes with pro shortcuts, and how to sustain the Michelin mentality in daily cooking life.</p>
+          <p class="book-contents-label">Contents</p>
+          <ul class="book-chapters">
+            <li>Introduction: The Michelin Mentality and 5 Mindset Shifts</li>
+            <li>Chapter 1: Mise en Place Mastery — Pro Station Setup and Daily Routine for Home Cooks</li>
+            <li>Chapter 2: Flavor Layering and Seasoning Like a Pro — The 6 Building Blocks (Acid, Fat, Salt, Heat, Umami, Aromatics)</li>
+            <li>Chapter 3: Plating and Presentation for Impact — 9 Michelin Plating Rules</li>
+            <li>Chapter 4: Signature Recipes and Pro Shortcuts — Pan-Seared Duck Breast, Crispy Skin Salmon, Risotto, Coq au Vin</li>
+            <li>Chapter 5: The Michelin Mentality in Daily Life — Sustaining Excellence, Handling Kitchen Stress, Building Habits</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PHILOSOPHY / COMMANDMENTS ═══════════════════════════════════════ -->
+  <div id="philosophy">
+    <p class="section-label reveal">— THE COMMANDMENTS —</p>
+    <p class="philosophy-intro reveal">The ten principles that define every great kitchen.</p>
+
+    <div class="commandments-list">
+
+      <!-- I -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">I</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment I</p>
+          <h3 class="commandment-title">Mise en Place Is Your Psychological Weapon</h3>
+          <p class="commandment-text">Mise en place is your psychological weapon.</p>
+        </div>
+      </div>
+
+      <!-- II -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">II</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment II</p>
+          <h3 class="commandment-title">Discipline Creates Freedom</h3>
+          <p class="commandment-text">Discipline creates freedom.</p>
+        </div>
+      </div>
+
+      <!-- III -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">III</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment III</p>
+          <h3 class="commandment-title">A Clean Station Is a Clear Mind</h3>
+          <p class="commandment-text">A clean station is a clear mind.</p>
+        </div>
+      </div>
+
+      <!-- IV -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">IV</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment IV</p>
+          <h3 class="commandment-title">Repetition Is How Instinct Is Built</h3>
+          <p class="commandment-text">Repetition is how instinct is built.</p>
+        </div>
+      </div>
+
+      <!-- V -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">V</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment V</p>
+          <h3 class="commandment-title">Emotional Control Is a Professional Skill</h3>
+          <p class="commandment-text">Emotional control is a professional skill.</p>
+        </div>
+      </div>
+
+      <!-- VI -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">VI</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment VI</p>
+          <h3 class="commandment-title">Systems Protect People and Standards</h3>
+          <p class="commandment-text">Systems protect people and standards.</p>
+        </div>
+      </div>
+
+      <!-- VII -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">VII</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment VII</p>
+          <h3 class="commandment-title">You Lead Through What You Model</h3>
+          <p class="commandment-text">You lead through what you model.</p>
+        </div>
+      </div>
+
+      <!-- VIII -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">VIII</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment VIII</p>
+          <h3 class="commandment-title">Precision Is a Form of Respect</h3>
+          <p class="commandment-text">Precision is a form of respect.</p>
+        </div>
+      </div>
+
+      <!-- IX -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">IX</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment IX</p>
+          <h3 class="commandment-title">Build a Culinary Identity</h3>
+          <p class="commandment-text">Build a culinary identity.</p>
+        </div>
+      </div>
+
+      <!-- X -->
+      <div class="commandment-item reveal">
+        <span class="commandment-bg-numeral" aria-hidden="true">X</span>
+        <div class="commandment-content">
+          <p class="commandment-numeral-label">Commandment X</p>
+          <h3 class="commandment-title">Be the Revolution</h3>
+          <p class="commandment-text">Be the revolution.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ NOTABLE WORK / EVENTS ════════════════════════════════════════════ -->
+  <section id="events">
+    <div class="events-inner">
+      <p class="section-label reveal">— NOTABLE WORK —</p>
+
+      <div class="events-list">
+        <div class="event-row reveal">Tom's Party — Private High-End Catered Event (November 10, 2018)</div>
+        <div class="event-row reveal">Culinary Technical Trainer for the Cast of FX's The Bear</div>
+        <div class="event-row reveal">30+ Years of Michelin-Starred Restaurant Service Across France and America</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SIGNATURE DISHES ══════════════════════════════════════════════════ -->
+  <div id="dishes">
+    <p class="section-label reveal">— SIGNATURE DISHES —</p>
+    <p class="dishes-intro reveal">A selection of plates that define the philosophy.</p>
+
+    <div class="dishes-grid">
+      <div class="dish-item reveal"><span class="dish-name">Sunchoke Chip with Tuna Tartar and Japanese Herbs</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Pancakes with Salmon Roe and Meyer Lemon, Garlic Chives</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Oysters with Sesame, Kohlrabi, Togarashi Oil, and Chinese Sauce</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Ratatouille Cannelloni</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Squash Roulades with Herbs and Tomato Chutney</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Potato and Smoked Gouda Croquettes with Roasted Garlic Aioli</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Babaganoush with Eggplant, Tahini, Garlic, and Lemon</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Whipped Bacon Fat with Scallions</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Avogoddess with Buttermilk, Creme Fraiche, Dill, Parsley, and Tarragon</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Avocado, Bacon, and Puntarelle Hors d'Oeuvre</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Shiso Koji Butter with Furikake</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Lamb Chops with Rosemary, Garlic, and Romesco</span></div>
+      <div class="dish-item reveal"><span class="dish-name">French Toast with Persimmons, Pomegranate, and Pears</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Pan-Seared Duck Breast with Cherry-Port Reduction</span></div>
+      <div class="dish-item reveal"><span class="dish-name">Perfect Crispy Skin Salmon</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ CONTACT ═══════════════════════════════════════════════════════════ -->
+  <section id="contact">
+    <h2 class="contact-headline reveal">ELEVATE YOUR KITCHEN.</h2>
+    <div class="contact-rule reveal"></div>
+    <p class="contact-sub reveal">Private events · Culinary consulting · Kitchen coaching</p>
+    <a href="mailto:chef@cyrilkabaoglu.com" class="contact-cta reveal">chef@cyrilkabaoglu.com</a>
+  </section>
+
+  <!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
+  <footer>
+    <span class="footer-copy">© Chef Cyril Kabaoglu</span>
+    <span class="footer-motto">Discipline · Structure · Execution</span>
+  </footer>
+
+  <!-- ═══ JAVASCRIPT ════════════════════════════════════════════════════════ -->
+  <script>
+    // ── NAV SCROLL BEHAVIOUR ────────────────────────────────────────────────
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 80) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    }, { passive: true });
+
+    // ── INTERSECTION OBSERVER — REVEAL ──────────────────────────────────────
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealEls.forEach(function (el) {
+      revealObserver.observe(el);
+    });
+
+    // ── STAGGERED REVEAL FOR GRIDS ──────────────────────────────────────────
+    // Apply staggered transition delays to dish items and commandments
+    document.querySelectorAll('.dish-item.reveal').forEach(function (el, i) {
+      el.style.transitionDelay = (i * 0.05) + 's';
+    });
+
+    document.querySelectorAll('.commandment-item.reveal').forEach(function (el, i) {
+      el.style.transitionDelay = (i * 0.07) + 's';
+    });
+
+    document.querySelectorAll('.book-card.reveal').forEach(function (el, i) {
+      el.style.transitionDelay = (i * 0.15) + 's';
+    });
+
+    document.querySelectorAll('.event-row.reveal').forEach(function (el, i) {
+      el.style.transitionDelay = (i * 0.1) + 's';
+    });
+  </script>
+
+</body>
+</html>
