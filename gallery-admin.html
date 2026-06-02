@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chef Cyril — Gallery Descriptions</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0d0d0d;
+      color: #f0ede8;
+      font-family: 'Georgia', serif;
+      padding: 2rem;
+    }
+    h1 {
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      color: #c9a227;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      color: #9b8a6e;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      font-family: 'Arial', sans-serif;
+    }
+    .toolbar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .save-status {
+      color: #9b8a6e;
+      font-size: 0.8rem;
+      font-family: 'Arial', sans-serif;
+      align-self: center;
+    }
+    .save-status.saved { color: #4caf50; }
+    .save-status.error { color: #e53935; }
+    .save-status.saving { color: #c9a227; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+    }
+    .card {
+      background: #161616;
+      border: 1px solid #2a2a2a;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .img-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #111;
+      position: relative;
+    }
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .img-num {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0,0,0,0.7);
+      color: #c9a227;
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      font-family: 'Arial', sans-serif;
+    }
+    .card-save {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 0.7rem;
+      font-family: 'Arial', sans-serif;
+      padding: 2px 7px;
+      background: rgba(0,0,0,0.7);
+    }
+    .card-save.saved { color: #4caf50; }
+    .card-save.saving { color: #c9a227; }
+    .card-save.error { color: #e53935; }
+    .card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+    .filename {
+      font-size: 0.7rem;
+      color: #555;
+      font-family: monospace;
+      word-break: break-all;
+    }
+    .desc-label {
+      font-size: 0.8rem;
+      color: #9b8a6e;
+      letter-spacing: 0.05em;
+      font-family: 'Arial', sans-serif;
+    }
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      background: #0d0d0d;
+      border: 1px solid #2a2a2a;
+      color: #f0ede8;
+      font-size: 0.9rem;
+      padding: 0.6rem;
+      resize: vertical;
+      font-family: 'Georgia', serif;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+    }
+    textarea:focus { outline: none; border-color: #c9a227; }
+    textarea::placeholder { color: #444; }
+  </style>
+</head>
+<body>
+
+<h1>Chef Cyril — Photo Descriptions</h1>
+<p class="subtitle">Type a description under each photo — it saves automatically. All descriptions go directly to Roman.</p>
+
+<div class="toolbar">
+  <span class="save-status" id="global-status">Loading saved descriptions...</span>
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<script>
+const SUPABASE_URL = 'https://vwyzkvrvodvdudxorvqt.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ3eXprdnJ2b2R2ZHVkeG9ydnF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNTMxNjAsImV4cCI6MjA5NTkyOTE2MH0.AAZDRqVFmwrVnzJqa_rh8zGW9MvvWCzx0R4d8co9DxQ';
+
+const IMAGES = [
+  "0C75B3D2-9EED-4B65-A4B6-A7C4AEDBB0F3.PNG",
+  "68013245999__EBBBF76F-CCBE-4F66-9FBD-C80579A48C7A.jpeg",
+  "68132919703__6534FCDA-6DF9-4F00-9A4F-7B545010FDB2.jpeg",
+  "68132923217__DD686DAF-9B91-46A9-B7EC-6E19338E952E.jpeg",
+  "DSC05925.jpg",
+  "Four-Course Mexican Street Food_11-2-2021_C210614B_31.jpg",
+  "Four-Course Mexican Street Food_11-2-2021_C210614B_9.JPG",
+  "IMG_0309.jpeg",
+  "IMG_0319.jpeg",
+  "IMG_0898.jpeg",
+  "IMG_1646.jpeg",
+  "IMG_2273.jpg",
+  "IMG_2319.jpg",
+  "IMG_6756.jpeg",
+  "IMG_6830.jpeg",
+  "IMG_6832.jpeg",
+  "IMG_6880.jpeg",
+  "IMG_6884.jpeg",
+  "IMG_6958.jpg",
+  "IMG_6962.jpg",
+  "IMG_7030.jpeg",
+  "IMG_7037.jpeg",
+  "IMG_7039.jpeg",
+  "IMG_8547.jpeg",
+  "IMG_8841.jpeg",
+  "IMG_9478.jpeg",
+  "Resized_Resized_20240412_141418_1712956535652_1712956538591.JPG",
+];
+
+async function sbFetch(path, opts) {
+  return fetch(SUPABASE_URL + path, {
+    ...opts,
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': 'Bearer ' + SUPABASE_ANON,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal',
+      ...(opts && opts.headers)
+    }
+  });
+}
+
+async function loadAll() {
+  const res = await sbFetch('/rest/v1/gallery_descriptions?select=filename,description', { method: 'GET' });
+  if (!res.ok) return {};
+  const rows = await res.json();
+  const map = {};
+  rows.forEach(r => { map[r.filename] = r.description; });
+  return map;
+}
+
+async function upsert(filename, description) {
+  const res = await sbFetch('/rest/v1/gallery_descriptions', {
+    method: 'POST',
+    headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify({ filename, description, updated_at: new Date().toISOString() })
+  });
+  return res.ok;
+}
+
+function setGlobalStatus(msg, cls) {
+  const el = document.getElementById('global-status');
+  el.textContent = msg;
+  el.className = 'save-status' + (cls ? ' ' + cls : '');
+}
+
+const debounceTimers = {};
+
+function onInput(filename, value, cardSaveEl) {
+  cardSaveEl.textContent = 'saving…';
+  cardSaveEl.className = 'card-save saving';
+  clearTimeout(debounceTimers[filename]);
+  debounceTimers[filename] = setTimeout(async () => {
+    const ok = await upsert(filename, value);
+    if (ok) {
+      cardSaveEl.textContent = '✓ saved';
+      cardSaveEl.className = 'card-save saved';
+      setGlobalStatus('All changes saved.', 'saved');
+    } else {
+      cardSaveEl.textContent = '✗ error';
+      cardSaveEl.className = 'card-save error';
+      setGlobalStatus('Save error — check connection.', 'error');
+    }
+  }, 800);
+}
+
+(async () => {
+  setGlobalStatus('Loading saved descriptions…');
+  let saved = {};
+  try { saved = await loadAll(); } catch(e) {}
+  setGlobalStatus('Ready. Descriptions save automatically.', '');
+
+  const gallery = document.getElementById('gallery');
+  IMAGES.forEach((filename, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const imgSrc = 'images/' + filename;
+    const savedDesc = saved[filename] || '';
+
+    card.innerHTML = `
+      <div class="img-wrap">
+        <img src="${imgSrc}" alt="Photo ${i+1}" loading="lazy" />
+        <span class="img-num">#${i + 1}</span>
+        <span class="card-save" id="cs-${i}"></span>
+      </div>
+      <div class="card-body">
+        <span class="filename">${filename}</span>
+        <label class="desc-label">Description</label>
+        <textarea placeholder="Describe this dish or moment...">${savedDesc}</textarea>
+      </div>
+    `;
+    gallery.appendChild(card);
+
+    const ta = card.querySelector('textarea');
+    const cardSaveEl = card.querySelector('.card-save');
+    ta.addEventListener('input', () => onInput(filename, ta.value, cardSaveEl));
+  });
+})();
+</script>
+</body>
+</html>
