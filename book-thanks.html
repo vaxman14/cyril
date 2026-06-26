@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Thank You — Chef Cyril Kabaoglu</title>
+  <title>Thank You — Schedule Your Consultation | Chef Cyril Kabaoglu</title>
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,8 +14,8 @@
     body {
       background: var(--bg); color: var(--cream);
       font-family: 'Inter', sans-serif; font-weight: 300; line-height: 1.7;
-      min-height: 100vh; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center; padding: 2rem;
+      min-height: 100vh; padding: 4rem 2rem 5rem;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
     }
     .rule { width: 60px; height: 1px; background: var(--gold); margin: 0 auto 2rem; }
     .eyebrow {
@@ -24,23 +24,43 @@
     }
     h1 {
       font-family: 'Playfair Display', serif; font-weight: 900;
-      font-size: clamp(2.2rem, 6vw, 4rem); color: var(--cream); line-height: 1.1; margin-bottom: 1.5rem;
+      font-size: clamp(2.2rem, 6vw, 3.8rem); color: var(--cream); line-height: 1.1; margin-bottom: 1.5rem;
     }
-    p { color: var(--muted); font-size: 1.1rem; max-width: 52ch; margin: 0 auto 1.25rem; }
+    p { color: var(--muted); font-size: 1.1rem; max-width: 54ch; margin: 0 auto 1.25rem; }
+    .schedule-label {
+      font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.72rem;
+      letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase;
+      margin: 3.5rem auto 1.5rem;
+    }
+    .calendly-inline-widget {
+      min-width: 320px; width: 100%; max-width: 1000px; height: 700px; margin: 0 auto;
+      border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+    }
+    .fallback { font-size: 0.95rem; margin-top: 1.5rem; }
+    .fallback a { color: var(--gold); text-decoration: none; }
+    .fallback a:hover { text-decoration: underline; }
     .home-link {
-      display: inline-block; margin-top: 2.5rem; border: 1px solid var(--gold); color: var(--gold);
-      padding: 14px 40px; letter-spacing: 0.2em; font-size: 0.8rem; text-transform: uppercase;
-      text-decoration: none; transition: background 0.3s ease, color 0.3s ease;
+      display: inline-block; margin-top: 2.5rem; border: 1px solid var(--border); color: var(--muted);
+      padding: 12px 36px; letter-spacing: 0.2em; font-size: 0.75rem; text-transform: uppercase;
+      text-decoration: none; transition: border-color 0.3s ease, color 0.3s ease;
     }
-    .home-link:hover { background: var(--gold); color: var(--bg); }
+    .home-link:hover { border-color: var(--gold); color: var(--gold); }
   </style>
 </head>
 <body>
   <div class="rule"></div>
   <p class="eyebrow">Request Received</p>
   <h1>Thank You.</h1>
-  <p>Your request has reached Chef Cyril. He personally reviews every inquiry and will be in touch shortly to schedule a short consultation call and recommend the right service for your needs.</p>
-  <p style="font-size:0.95rem">In the meantime, feel free to email <a href="mailto:info@chefcyrilkabaoglu.com" style="color:var(--gold);text-decoration:none">info@chefcyrilkabaoglu.com</a> with anything urgent.</p>
+  <p>Your request has reached Chef Cyril. The final step: book a short consultation call below so he can understand your needs and recommend the right service.</p>
+
+  <p class="schedule-label">— Schedule Your Consultation Call —</p>
+
+  <!-- Calendly inline widget -->
+  <div class="calendly-inline-widget" data-url="https://calendly.com/cyril7th/chef-cyril-consultation-call?background_color=0d0d0d&text_color=f0ede8&primary_color=c9a227"></div>
+  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+  <p class="fallback">Can't see the scheduler? <a href="https://calendly.com/cyril7th/chef-cyril-consultation-call" target="_blank" rel="noopener">Open it in a new tab</a>.</p>
+
   <a href="/" class="home-link">Back to Home</a>
 </body>
 </html>
