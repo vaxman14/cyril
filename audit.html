@@ -559,9 +559,9 @@
       <p class="price-terms">One-Time · Comprehensive Assessment</p>
       <a href="#" id="checkout-btn" class="btn btn-primary" style="width:100%;text-align:center">Reserve Your Audit</a>
       <p class="price-note">
-        Prefer to talk first? <a href="mailto:info@chefcyrilkabaoglu.com?subject=Kitchen%20Systems%20Audit%20%E2%80%94%20Discovery%20Call">Book a discovery call</a> and we'll make sure it's the right fit before you commit.
+        Reach out and Cyril will personally confirm the audit is the right fit for your operation before anything is booked.
+        Prefer email? <a href="mailto:info@chefcyrilkabaoglu.com?subject=Kitchen%20Systems%20Audit">info@chefcyrilkabaoglu.com</a>
       </p>
-      <p class="price-note" style="font-size:0.78rem;opacity:0.7">Secure checkout. A confirmation and scheduling link follow your booking.</p>
     </div>
   </section>
 
@@ -583,23 +583,25 @@
 
   <script>
     /* ─────────────────────────────────────────────────────────────────────
-       CHECKOUT WIRING
+       RESERVE BUTTON WIRING
        Single source of truth for the "Reserve" button.
 
-       To switch to Stripe: create a Stripe Payment Link for the $1,500 audit
-       (dashboard.stripe.com → Payment Links), then paste its URL below.
-       That one line is the only change needed — the page is already built for it.
+       Right now it routes to the contact section so Cyril qualifies each lead
+       before any payment (no direct checkout yet).
 
-       Until Cyril provides the Stripe link, this falls back to his live
-       Gumroad checkout so the page is fully functional and sellable TODAY.
+       To switch to paid checkout later: paste a Stripe Payment Link below.
+       That one line is the only change needed — external http(s) links auto-open
+       in a new tab; internal anchors (like "/#contact") navigate in place.
     ───────────────────────────────────────────────────────────────────────── */
-    var CHECKOUT_URL = "https://cyrilicious225.gumroad.com/l/dorvq"; // ← replace with Stripe Payment Link when ready
+    var CHECKOUT_URL = "/#contact"; // ← paste a Stripe Payment Link here to take payment directly
     (function () {
       var btn = document.getElementById('checkout-btn');
       if (btn) {
         btn.setAttribute('href', CHECKOUT_URL);
-        btn.setAttribute('target', '_blank');
-        btn.setAttribute('rel', 'noopener');
+        if (/^https?:\/\//i.test(CHECKOUT_URL)) {
+          btn.setAttribute('target', '_blank');
+          btn.setAttribute('rel', 'noopener');
+        }
       }
     })();
 
