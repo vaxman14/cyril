@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /book-thanks.html
+Disallow: /audit.html
+
+Sitemap: https://chefcyrilkabaoglu.com/sitemap.xml
