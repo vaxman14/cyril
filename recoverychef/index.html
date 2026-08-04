@@ -609,6 +609,14 @@ const statIO=new IntersectionObserver(es=>es.forEach(e=>{
 }),{threshold:.5});
 document.querySelectorAll('.trust-num').forEach(el=>statIO.observe(el));
 
+// Netlify form submit (fire-and-forget; localStorage kept as backup)
+function postForm(formName,data){
+  try{
+    const body=new URLSearchParams({'form-name':formName,...data}).toString();
+    return fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).catch(()=>{});
+  }catch(e){}
+}
+
 // Survey
 (function(){
   const form=document.getElementById('surveyForm');
@@ -648,7 +656,7 @@ document.querySelectorAll('.trust-num').forEach(el=>statIO.observe(el));
     }
     answers.email=email;
     try{localStorage.setItem('chefrecovery_survey',JSON.stringify({...answers,ts:Date.now()}));}catch(e){}
-    // TODO backend: POST answers to your endpoint here
+    postForm('chefrecovery-survey',answers);
     form.hidden=true;
     document.querySelector('#surveyShell .progress').hidden=true;
     document.getElementById('surveyThanks').hidden=false;
@@ -666,7 +674,7 @@ document.getElementById('foundingForm').addEventListener('submit',function(e){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){this.email.style.borderColor='#e5484d';ok=false}else{this.email.style.borderColor=''}
   if(!ok)return;
   try{localStorage.setItem('chefrecovery_founding',JSON.stringify({name,email,ts:Date.now()}));}catch(e){}
-  // TODO backend: POST {name,email} to your endpoint here
+  postForm('chefrecovery-founding',{name,email});
   this.hidden=true;
   document.getElementById('foundingThanks').hidden=false;
 });
@@ -688,5 +696,12 @@ document.querySelectorAll('.faq-q').forEach(q=>{
   });
 });
 </script>
+<!-- Static form definitions for Netlify Forms detection (JS posts to these names) -->
+<form name="chefrecovery-survey" data-netlify="true" netlify-honeypot="website" hidden>
+  <input type="text" name="role"><input type="text" name="years"><input type="text" name="shift"><input type="text" name="pain"><input type="email" name="email"><input type="text" name="website">
+</form>
+<form name="chefrecovery-founding" data-netlify="true" netlify-honeypot="website" hidden>
+  <input type="text" name="name"><input type="email" name="email"><input type="text" name="website">
+</form>
 </body>
 </html>
