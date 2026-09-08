@@ -37,7 +37,7 @@
   <p>This site does not use cookies that are strictly necessary for functionality. The portfolio is read-only and requires no login or session management.</p>
 
   <h2>Analytics Cookies</h2>
-  <p>We may use Google Analytics to understand how visitors interact with this site. Google Analytics sets cookies to track page views and session data anonymously. No personally identifiable information is collected through analytics. You can opt out via <a href="https://tools.google.com/dlpage/gaoptout" target="_blank">Google's opt-out tool</a>.</p>
+  <p>We use PostHog to count anonymous page views and understand which pages visitors use. This implementation disables session recording, form and click autocapture, persistent browser storage, and individual visitor profiles. It does not record form contents or keystrokes.</p>
 
   <h2>Third-Party Cookies</h2>
   <p>Google Fonts is loaded from Google's CDN. Google may set cookies or log your IP address as part of serving these font files. We do not control this behavior.</p>
@@ -57,6 +57,7 @@
     </span>
     <div style="margin-top:1rem;color:#4a4a4a;font-size:0.8rem">© 2026 TriptikLA LLC · Chef Cyril Kabaoglu</div>
   </footer>
+<script src="/analytics.js"></script>
 <script src="https://ctf-widgets.netlify.app/v1/ada.js" defer data-position="bottom-left" data-color="#7c3aed" data-statement="/accessibility.html"></script>
 </body>
 </html>
